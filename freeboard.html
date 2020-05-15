@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+  <title>WEB1 - Freeboard</title>
+  <meta Charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+<script src="colors.js"></script>
+</head>
+<body>
+  <h1><a href="index.html">WEB</a></h1>
+  <div id="grid">
+  <ol>
+    <li><a href="1.html">HTML</a></li>
+    <li><a href="2.html">CSS</a></li>
+    <li><a href="3.html">JavaScript</a></li>
+    <li><a href="freeboard.html">공지사항</a></li>
+    <li><a href="map.html">길찾기</a></li>
+<br>
+    <input id="night_day2" type="button" value="night" onclick="
+      nightDayHandler(this);
+    ">
+  </ol>
+<div id="article">
+  <h2>게시판 목록</h2>  
+  <div id="id_list"></div>
+  <script>
+      // 페이지 나누기
+      // var v_list = document.getElementById("id_list");
+      // var v_memList = JSON.parse(localStorage.getItem("gesiT"));
+      // // 페이지 나누기의 핵심! 페이지당 몇개?
+      // var v_cntPerPage = 10;
+      // var v_totalCnt = v_memList.length;
+      // var v_totalPage = Math.ceil(v_totalCnt / v_cntPerPage);
+      // var v_curPage = 1;  // 일단 시작페이지라고 가정
+      //  if(request.getParameter("pg_num")){
+      //     v_curPage = request.getParameter("pg_num");
+      //  }
+
+      // var v_startNum = (v_curPage -1)* v_cntPerPage;
+      // var v_endNum = v_startNum + (v_cntPerPage-1);
+      // if (v_curPage == v_totalPage) {         // 현재 페이지가 마지막 페이지라면 ...
+      //     v_endNum = (v_totalCnt - 1);
+      // }
+
+
+      function f_ckDel(){
+          var v_ckBoxs = document.getElementsByName("nm_del");
+          var v_ckVals = [];
+          for(var i=0; i< v_ckBoxs.length; i++){
+              if(v_ckBoxs[i].checked){
+                  v_ckVals.push(v_ckBoxs[i].value);
+              }
+          }
+          // 선택된 것 지우기
+          for(var i=0; i<v_datas.length;i++){
+              for(var j=0; j< v_ckVals.length; j++){
+                  if(v_datas[i].uniq == v_ckVals[j]){
+                      v_datas.splice(i,1);  // 배열에서 삭제
+                      i--;                   // 뒤에 것이 앞으로 오므로
+                      break 
+                  }
+              }
+          }
+          localStorage.setItem(v_tblName,JSON.stringify(v_datas));
+          //location.replace("list.html");  // 페이지 다시 불러오깅
+          f_init();
+      }
+
+      var v_tblName="gesiT";
+      var v_list = document.getElementById("id_list");
+      var v_datas;
+
+      function f_init(){
+          v_datas = JSON.parse(localStorage.getItem(v_tblName));
+          var v_tblString = "<table border=1 width=auto>";
+          v_tblString += "<tr><th>넘버</th><th>제목</th><th>작가</th><th>등록일</th><th>삭제</th></tr>"    
+          for(var i=0; i< v_datas.length; i++){
+              var v_gul = v_datas[i];
+              v_tblString += "<tr>";
+              v_tblString += "<td>" + (i+1) + "</td>";    
+              v_tblString += "<td><a href=freeboard/read.html?uniq=" + v_gul.uniq +" >" +v_gul.title + "</a></td>";    
+              v_tblString += "<td>" +v_gul.writer + "</td>";    
+              v_tblString += "<td>" +v_gul.date + "</td>";
+              v_tblString += "<td><input type=checkbox name=nm_del value=" + v_gul.uniq + " ></td>";                     
+              v_tblString += "</tr>";
+          }
+          v_tblString += "</table>";
+          v_tblString += "<a href=freeboard/write.html >글쓰기</a>";
+          v_list.innerHTML = v_tblString;
+      }
+
+      window.onload= function(){
+          f_init();
+      }
+  </script>
+</div>
+</div>
+</body>
+</html>
